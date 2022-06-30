@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "548647611045",
+    "project_id": "myplanner-353422",
+    "storage_bucket": "myplanner-353422.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548647611045:android:bd83a3a5e524c79bcb7b4c",
+        "android_client_info": {
+          "package_name": "com.example.myplanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "548647611045-k2fkue7njf0qbcg0685kcontqpfcf2g8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuWdJ2UqYe4GOfPGMbmQ1wRs71PeqbdDc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "548647611045-k2fkue7njf0qbcg0685kcontqpfcf2g8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
