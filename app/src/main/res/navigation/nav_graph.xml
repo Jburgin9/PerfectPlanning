@@ -9,5 +9,17 @@
         android:id="@+id/homeScreenFragment"
         android:name="com.example.myplanner.HomeScreenFragment"
         android:label="HomeScreenFragment"
-        tools:layout="@layout/home_screen_frag"/>
+        tools:layout="@layout/home_screen_frag">
+        <action
+            android:id="@+id/action_homeScreenFragment_to_addTaskFragment"
+            app:destination="@id/addTaskFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addTaskFragment"
+        android:name="com.example.myplanner.AddTaskFragment"
+        android:label="AddTaskFragment" >
+        <action
+            android:id="@+id/action_addTaskFragment_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment" />
+    </fragment>
 </navigation>

@@ -3,6 +3,7 @@ package com.example.myplanner
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -10,29 +11,34 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.math.log
 
 class Repo: FirestoreRequest {
     private val firebaseInstance = FirebaseFirestore.getInstance()
 
-    fun addTask(newTask: String){
-        val newMap = hashMapOf(newTask.toString() to newTask)
+    fun addTask(newTask: Task){
+        val newMap = HashMap<String, String>()
+        newMap.put("name", newTask.name!!)
+        newMap.put("isCompleted", newTask.isCompleted.toString())
+        newMap.put("dueDate", newTask.dueDate.toString())
         firebaseInstance.collection("tasks")
-            .add(newMap)
+            .document().set(newMap)
             .addOnSuccessListener {
-                Log.d("Test", "addTask: $it")
+
             }
             .addOnFailureListener {
                 Log.d("Test", "fail: ${it}")
             }
     }
 
-    override suspend fun readList(): Flow<List<String>> = callbackFlow{
+    override fun readList(): Flow<ArrayList<Task>> = callbackFlow{
         val docRef = firebaseInstance.collection("tasks")
         docRef.get()
             .addOnSuccessListener {
-                val results = it.documents
-                Log.d("Test", "readList: $results")
+
                 }
                 .addOnFailureListener {
                     it.printStackTrace()
@@ -43,15 +49,35 @@ class Repo: FirestoreRequest {
             }
         }
 
-        awaitClose{ subscription.remove()}
+        awaitClose{ subscription.remove() }
     }
 
-    fun extractList(snapshots: List<DocumentSnapshot>): ArrayList<String>{
-        val list = ArrayList<String>()
+    private fun extractList(snapshots: List<DocumentSnapshot>): ArrayList<Task>{
+        var list = ArrayList<Task>()
         snapshots.forEach {
-            list.add(it.id)
+            list.add(it.toObject(Task::class.java)!!)
         }
         return list
+    }
+
+    private fun locateTaskId(_taskName: String): String{
+        var id = ""
+        val document = firebaseInstance.collection("tasks")
+            .whereEqualTo("name", _taskName)
+        document.get().addOnSuccessListener {
+            for(doc in it){
+                id = doc.id
+            }
+        }
+        return id
+    }
+
+    fun updateTask(_task: Task){
+        firebaseInstance.collection("tasks")
+            .document("9jMHcnq6jWbEAT4F9ZzE")
+            .update("isCompleted", _task.isCompleted)
+            .addOnSuccessListener { Log.d("Test", "updateTask: success, ${_task.isCompleted}") }
+            .addOnFailureListener { Log.d("Test", "updateTask: failure") }
     }
 
 }
